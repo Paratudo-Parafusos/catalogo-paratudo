@@ -94,6 +94,33 @@ tools/logo_mark*.png        ← logo compacta (rodapé)
 .github/workflows/pages.yml ← publica no GitHub Pages a cada push
 ```
 
+
+## Catálogo de Linhas (simplificado)
+
+Além do catálogo completo, o repositório gera o **Catálogo de Linhas**
+(`simplificado/index.html`): 19 páginas A4 mostrando as ~230 linhas que a
+loja trabalha, por seção, sem preço — pro cliente folhear impresso ou online.
+No GitHub Pages ele fica em `/simplificado/`.
+
+- O conteúdo vem de `tools/dados_simplificado.py` (seções, linhas e qual foto
+  de `tools/fotos_docx/` cada linha usa). Pra mudar qualquer coisa do
+  catálogo, edite esse arquivo.
+- As fotos em `tools/fotos_docx/` foram extraídas do Word
+  "CATALOGO PARATUDO.docx" (numeração `{N}.jpg` segue a ordem do documento).
+- Depois de editar, gere de novo:
+
+```bash
+python tools/build_simplificado.py
+```
+
+- Pra gerar o PDF de impressão: abra `simplificado/index.html` no Chrome e
+  use o botão **Imprimir / Salvar PDF** (ou Ctrl+P, destino PDF, margens
+  nenhuma).
+
+Pendências conhecidas da 1ª versão: logos das marcas parceiras (a página 3 e
+a contracapa usam os nomes em texto por enquanto) e foto da fachada na página
+de apresentação.
+
 ## Contato
 
 **Paratudo Parafusos e Ferramentas**

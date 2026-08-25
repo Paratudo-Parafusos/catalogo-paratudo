@@ -26,6 +26,8 @@ jobs:
         run: |
           mkdir dist
           cp index.html dist/
+          mkdir dist/simplificado
+          cp simplificado/index.html dist/simplificado/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
