@@ -410,20 +410,20 @@ body{background:var(--canvas);color:var(--dtext);
 .acard p{font-size:12.5px;line-height:1.55;color:#4a4548}
 .acard a{color:var(--red);text-decoration:none}
 .ap-body .entrega{margin:auto 0 26px}
-.mgrid{padding:26px 46px 0;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;flex:1;
+.mgrid{padding:22px 42px 0;display:grid;grid-template-columns:repeat(6,1fr);gap:10px;flex:1;
   align-content:start}
-.mlogo{border:1px solid var(--line);background:#fff;height:74px;display:flex;
-  align-items:center;justify-content:center;padding:11px;
+.mlogo{border:1px solid var(--line);background:#fff;height:62px;display:flex;
+  align-items:center;justify-content:center;padding:9px;
   clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
 .mlogo img{max-width:100%;max-height:100%;object-fit:contain}
-.mchips{padding:14px 46px 0;display:flex;flex-wrap:wrap;gap:8px;flex:none}
+.mchips{padding:14px 42px 0;display:flex;flex-wrap:wrap;gap:7px;flex:none}
 .mchip{border:1px solid var(--line);color:var(--steel);font-size:11px;font-weight:700;
   letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;
   clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
   background:#faf8f8}
-.mnota{padding:16px 46px 34px;font-size:12px;color:var(--steel)}
-.ctlogo{background:#fff;height:46px;display:flex;align-items:center;justify-content:center;
-  padding:7px;clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}
+.mnota{padding:14px 42px 26px;font-size:11.5px;color:var(--steel)}
+.ctlogo{background:#fff;height:40px;display:flex;align-items:center;justify-content:center;
+  padding:6px;clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)}
 .ctlogo img{max-width:100%;max-height:100%;object-fit:contain}
 
 /* páginas escuras */
@@ -481,7 +481,7 @@ body{background:var(--canvas);color:var(--dtext);
 /* contracapa */
 .contra .ct-logo{display:flex;justify-content:center;padding:54px 0 10px}
 .contra .logopanel{width:250px}
-.ct-marcas{padding:30px 52px 0;display:grid;grid-template-columns:repeat(5,1fr);gap:11px}
+.ct-marcas{padding:26px 52px 0;display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
 .ct-info{padding:26px 52px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .ct-info h5{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
 .ct-info p{font-size:13.5px;font-weight:600;margin-top:6px}

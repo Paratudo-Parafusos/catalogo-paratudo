@@ -125,11 +125,17 @@ existe e cai pro nome em texto quando não existe — então pra incluir uma mar
 nova é só salvar o arquivo com o mesmo nome que está em `MARCAS_PARCEIRAS`
 (nomes com espaço/acento têm um de-para no dicionário `LOGO_ARQ` do gerador).
 
-São 45 logos (sites oficiais + Wikimedia Commons + repositórios de logos como
-seeklogo e freebiesupply). Marcas ainda sem logo — aparecem como chip de texto
-na página 3: Western, Nakashi, Saints, Bremen, Ribeiro, H7, Pinheiro, Real,
-Walter, Botafogo, Pado, Servente, Estival, Hard, CCM do Brasil, PDR e Xadrez
-(nomes genéricos demais pra busca automática ou logo só em versão branca).
+São 51 logos, de 4 fontes: sites oficiais das marcas, Wikimedia Commons,
+repositórios de logos (seeklogo e o CDN da freebiesupply) e sites de grupos
+donos de várias marcas (ex.: ccmdobrasil.com.br traz Nakashi, Kawashima e CCM
+em qualidade oficial — o site é feito em JavaScript, então só aparece se você
+renderizar com `chrome --headless --dump-dom`).
+
+Marcas ainda sem logo, que aparecem como chip de texto na página 3: Western,
+Ribeiro, H7, Pinheiro, Real, Botafogo, Servente, Estival, Hard, PDR e Xadrez.
+São marcas pequenas de nome genérico — a busca automática devolve coisa errada
+(Real Madrid, banda KISS, Sherwin-Williams) em vez do logo certo. Pra essas,
+o caminho é pedir o arquivo ao fornecedor.
 
 Pendência: foto da fachada na página de apresentação.
 
