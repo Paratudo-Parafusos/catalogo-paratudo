@@ -14,8 +14,15 @@ from dados_simplificado import (SECOES, VONIXX, TINTAS, ESCADAS, PARAFUSOS,
                                 MARCAS_PARCEIRAS, CONTATO, PAGINAS)
 
 FOTOS = os.path.join(AQUI, 'fotos_docx')
+LOGOS = os.path.join(AQUI, 'logos_marcas')
 OUT_DIR = os.path.join(os.path.dirname(AQUI), 'simplificado')
 ANO = '2026'
+
+# nome da marca -> arquivo em tools/logos_marcas (sem extensão)
+LOGO_ARQ = {
+ 'Black+Decker': 'Black_Decker', 'Maxi Rubber': 'Maxi_Rubber',
+ 'Kärcher': 'Karcher', 'Hansatécnica': 'Hansatecnica',
+}
 
 # ---------------------------------------------------------------- util
 _cache = {}
@@ -27,6 +34,23 @@ def foto(n, maxpx=420, q=84):
     im.thumbnail((maxpx, maxpx), Image.LANCZOS)
     buf = io.BytesIO()
     im.save(buf, 'JPEG', quality=q)
+    uri = 'data:image/jpeg;base64,' + base64.b64encode(buf.getvalue()).decode()
+    _cache[key] = uri
+    return uri
+
+def logo_marca(nome, maxpx=300):
+    """data URI do logo da marca, ou None se não tivermos o arquivo."""
+    base = LOGO_ARQ.get(nome, nome.replace(' ', '_'))
+    p = os.path.join(LOGOS, base + '.jpg')
+    if not os.path.exists(p):
+        return None
+    key = ('logo', base, maxpx)
+    if key in _cache:
+        return _cache[key]
+    im = Image.open(p)
+    im.thumbnail((maxpx, maxpx), Image.LANCZOS)
+    buf = io.BytesIO()
+    im.save(buf, 'JPEG', quality=88)
     uri = 'data:image/jpeg;base64,' + base64.b64encode(buf.getvalue()).decode()
     _cache[key] = uri
     return uri
@@ -79,8 +103,16 @@ def pg(cls, inner, num=None):
     return f'<div class="pageframe"><div class="pagescale"><div class="page {cls}">{inner}{n}</div></div></div>'
 
 def rodape_secao(marcas, num):
-    m = ''.join(f'<span>{x}</span>' for x in marcas)
-    return (f'<div class="cat-foot"><div class="marcas">{m}</div>'
+    """Rodapé com as marcas da seção: só logos, ou só texto — nunca misturado."""
+    com = [(x, logo_marca(x, 200)) for x in marcas]
+    tem_logo = [(x, u) for x, u in com if u]
+    if len(tem_logo) >= 3:
+        itens = ''.join(f'<img src="{u}" alt="{x}">' for x, u in tem_logo[:5])
+        cls = ' logos'
+    else:
+        itens = ''.join(f'<span>{x}</span>' for x in marcas[:6])
+        cls = ''
+    return (f'<div class="cat-foot"><div class="marcas{cls}">{itens}</div>'
             f'<div class="pgchip">{num:02d}</div></div>')
 
 def header_secao(sec, slim=False):
@@ -180,11 +212,18 @@ def pagina_apresentacao(num):
     <div class="capa-foot"><span class="fone">{CONTATO["fones"]}</span><span class="site">{CONTATO["cidade"]}</span></div>''', num)
 
 def pagina_marcas(num):
-    chips = ''.join(f'<span class="mchip">{m}</span>' for m in MARCAS_PARCEIRAS)
+    com, sem = [], []
+    for m in MARCAS_PARCEIRAS:
+        uri = logo_marca(m)
+        if uri:
+            com.append(f'<div class="mlogo"><img src="{uri}" alt="{m}"></div>')
+        else:
+            sem.append(f'<span class="mchip">{m}</span>')
     return pg('marcaspg', f'''
     <div class="ap-band"><div class="kicker">Marcas parceiras</div>
       <h2>As marcas que o<br><span>profissional confia</span></h2></div>
-    <div class="mwall">{chips}</div>
+    <div class="mgrid">{''.join(com)}</div>
+    <div class="mchips">{''.join(sem)}</div>
     <p class="mnota">Estas e muitas outras — o estoque completo você confere
     na loja ou no WhatsApp.</p>''', num)
 
@@ -224,7 +263,12 @@ def pagina_parafusos(num):
       <span class="fone">(35) 3427-2450</span></div>''')
 
 def pagina_contracapa(num):
-    chips = ''.join(f'<span class="mchip esc">{m}</span>' for m in MARCAS_PARCEIRAS[:36])
+    itens = []
+    for m in MARCAS_PARCEIRAS:
+        uri = logo_marca(m, 220)
+        if uri:
+            itens.append(f'<div class="ctlogo"><img src="{uri}" alt="{m}"></div>')
+    chips = ''.join(itens)
     return pg('dark contra', f'''
     <div class="ct-logo"><div class="logopanel"><img src="{logo_uri()}" alt="Paratudo"></div></div>
     <div class="ct-marcas">{chips}</div>
@@ -334,8 +378,11 @@ body{background:var(--canvas);color:var(--dtext);
 .grid.g5 .cell figcaption{font-size:8.6px}
 .cat-foot{border-top:1px solid var(--line);margin:8px 32px 0;padding:12px 0 16px;
   display:flex;align-items:center;justify-content:space-between;flex:none}
-.marcas{display:flex;gap:22px;font-size:11px;font-weight:800;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--steel)}
+.marcas{display:flex;gap:22px;align-items:center;font-size:11px;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--steel)}
+.marcas.logos{gap:30px}
+.marcas img{height:21px;width:auto;max-width:100px;object-fit:contain;
+  filter:grayscale(1) contrast(.9);opacity:.62;mix-blend-mode:multiply}
 .pgchip{background:var(--red);color:#fff;font-size:11px;font-weight:800;width:32px;height:24px;
   display:flex;align-items:center;justify-content:center;
   clip-path:polygon(6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%,0 6px)}
@@ -363,15 +410,21 @@ body{background:var(--canvas);color:var(--dtext);
 .acard p{font-size:12.5px;line-height:1.55;color:#4a4548}
 .acard a{color:var(--red);text-decoration:none}
 .ap-body .entrega{margin:auto 0 26px}
-.mwall{padding:20px 56px;display:flex;flex-wrap:wrap;gap:13px;align-content:center;
-  justify-content:center;flex:1}
-.mchip{border:1px solid var(--line);color:var(--ink);font-size:14.5px;font-weight:700;
-  letter-spacing:.08em;text-transform:uppercase;padding:13px 24px;
-  clip-path:polygon(9px 0,100% 0,100% calc(100% - 9px),calc(100% - 9px) 100%,0 100%,0 9px);
+.mgrid{padding:26px 46px 0;display:grid;grid-template-columns:repeat(5,1fr);gap:14px;flex:1;
+  align-content:start}
+.mlogo{border:1px solid var(--line);background:#fff;height:74px;display:flex;
+  align-items:center;justify-content:center;padding:11px;
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+.mlogo img{max-width:100%;max-height:100%;object-fit:contain}
+.mchips{padding:14px 46px 0;display:flex;flex-wrap:wrap;gap:8px;flex:none}
+.mchip{border:1px solid var(--line);color:var(--steel);font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;
+  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);
   background:#faf8f8}
-.mchip.esc{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);color:var(--dtext);
-  font-size:10.5px;padding:7px 12px}
-.mnota{padding:20px 56px 46px;font-size:12.5px;color:var(--steel)}
+.mnota{padding:16px 46px 34px;font-size:12px;color:var(--steel)}
+.ctlogo{background:#fff;height:46px;display:flex;align-items:center;justify-content:center;
+  padding:7px;clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px)}
+.ctlogo img{max-width:100%;max-height:100%;object-fit:contain}
 
 /* páginas escuras */
 .dark{background:var(--ink);color:var(--dtext)}
@@ -426,10 +479,10 @@ body{background:var(--canvas);color:var(--dtext);
 .tcard p{font-size:11.5px;color:var(--dmut)}
 
 /* contracapa */
-.contra .ct-logo{display:flex;justify-content:center;padding:48px 0 8px}
-.contra .logopanel{width:260px}
-.ct-marcas{padding:26px 52px 0;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.ct-info{padding:18px 52px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.contra .ct-logo{display:flex;justify-content:center;padding:54px 0 10px}
+.contra .logopanel{width:250px}
+.ct-marcas{padding:30px 52px 0;display:grid;grid-template-columns:repeat(5,1fr);gap:11px}
+.ct-info{padding:26px 52px 0;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .ct-info h5{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
 .ct-info p{font-size:13.5px;font-weight:600;margin-top:6px}
 .contra .entrega{margin-top:22px}

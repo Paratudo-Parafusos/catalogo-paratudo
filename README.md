@@ -117,9 +117,22 @@ python tools/build_simplificado.py
   use o botão **Imprimir / Salvar PDF** (ou Ctrl+P, destino PDF, margens
   nenhuma).
 
-Pendências conhecidas da 1ª versão: logos das marcas parceiras (a página 3 e
-a contracapa usam os nomes em texto por enquanto) e foto da fachada na página
-de apresentação.
+### Logos das marcas
+
+Os logos ficam em `tools/logos_marcas/{Marca}.jpg` (29 arquivos, coletados dos
+sites oficiais e do Wikimedia Commons). O gerador usa o logo quando o arquivo
+existe e cai pro nome em texto quando não existe — então pra incluir uma marca
+nova é só salvar o arquivo com o mesmo nome que está em `MARCAS_PARCEIRAS`
+(nomes com espaço/acento têm um de-para no dicionário `LOGO_ARQ` do gerador).
+
+Marcas ainda sem logo: 3M, Coral, ESAB, Gedore, Starrett, Norton, Sata,
+Menegotti, Denver, Bremen, Chiaperini, Cortag, Nakashi, Kawashima, Western,
+Tekbond, Stam, Belenus, Botafogo, H7, Corneta, Servente, Xadrez, PDR, Real,
+Pinheiro, Walter, Saints, Ribeiro, CCM do Brasil, Hard — aparecem como chip
+de texto na página 3. Os sites dessas marcas ou bloqueiam download automático
+ou só publicam o logo em versão branca (invisível no fundo claro).
+
+Pendência: foto da fachada na página de apresentação.
 
 ## Contato
 
