@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Conteúdo do Catálogo de Linhas (simplificado) da Paratudo.
+"""Conteúdo do Catálogo de Produtos da Paratudo.
 
 Este arquivo é a FONTE do catálogo: pra mudar nome de linha, foto, seção ou
 página, edite aqui e rode `python tools/build_simplificado.py`.
@@ -62,6 +62,7 @@ SECOES = {
    ('Rodas de Lixa', [72, 73]),
    ('Mantas Abrasivas', [74]),
    ('Pontas Montadas', [75]),
+   ('Pedras Abrasivas', [79, 80, 81, 82]),
   ]},
  'bateria': {
   'nome': 'Ferramentas a Bateria', 'icone': 'bateria',
@@ -71,7 +72,6 @@ SECOES = {
    ('Chaves de Impacto', [76]),
    ('Parafusadeiras', [77]),
    ('Serras Tico-Tico', [78]),
-   ('Pedras Abrasivas', [79, 80, 81, 82]),
    ('Esmerilhadeiras', [83]),
    ('Aplicadores de Silicone', [84]),
    ('Lanternas', [85]),
@@ -131,7 +131,7 @@ SECOES = {
    ('Alicates Amperímetro', [158]),
    ('Termômetros', [159, 160]),
    ('Detectores de Tensão', [161]),
-   ('Jogos de Pontas', [162, 163]),
+   ('Pontas de Teste', [162, 163]),
   ]},
  'solda': {
   'nome': 'Solda e Consumíveis', 'icone': 'solda',
@@ -309,7 +309,7 @@ SECOES = {
  'epi': {
   'nome': 'EPI e Segurança', 'icone': 'capacete',
   'marcas': ['Estival', 'Kadesh', 'EcoSafety', 'Sayro'],
-  'chamada': 'Calçados de segurança Estival — linha completa de botinas, sapatos e botas PVC.',
+  'chamada': 'Calçados de segurança Estival: linha completa de botinas, sapatos e botas PVC.',
   'linhas': [
    ('Sapatos, Botinas e Botas PVC', [301, 302, 303]),
    ('Luvas: Raspa, Vaqueta, PVC, Látex e Mais', [304, 305, 306, 307, 308, 309, 310, 311, 312]),
@@ -408,14 +408,14 @@ TINTAS = {
 }
 ESCADAS = {
  'titulo': 'Escadas',
- 'texto': 'De alumínio, fibra e aço — domésticas, extensivas e plataformas.',
+ 'texto': 'De alumínio, fibra e aço, nas versões doméstica, extensiva e plataforma.',
  'marca': 'Botafogo',
  'fotos': [339, 340, 341, 342],
 }
 PARAFUSOS = {
  'titulo': 'Parafusos & Cabos de Aço',
  'kicker': 'A especialidade da casa',
- 'texto': 'Da movelaria ao estrutural: bitola, rosca e acabamento pra cada '
+ 'texto': 'Da movelaria ao estrutural: bitola, rosca e acabamento para cada '
           'serviço. Se não estiver na prateleira, a gente busca.',
  'chips': ['Allen', 'Inox', 'Aço 8.8 e 10.9', 'Movelaria', 'Agrícola',
            'Industrial e Estrutural', 'Barra Roscada', 'Junções',
@@ -443,11 +443,10 @@ MARCAS_PARCEIRAS = [
 
 # ------------------------------------------------------------ contato
 CONTATO = {
- 'fones': '(35) 3427-2450 · (35) 9.9758-0912',
- 'cidade': 'Pouso Alegre — MG',
- 'entrega': 'Entrega grátis pra Pouso Alegre e região',
+ 'fones': '(35) 3427-2450',
+ 'cidade': 'Pouso Alegre / MG',
+ 'entrega': 'Entrega grátis para Pouso Alegre e região',
  'entrega_obs': 'consulte condições com nossos especialistas',
- 'catalogo_online': 'paratudo-parafusos.github.io/catalogo-paratudo',
 }
 
 # --------------------------------------------------------- paginação

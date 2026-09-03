@@ -56,7 +56,7 @@ def logo_marca(nome, maxpx=300):
     return uri
 
 def logo_uri():
-    im = Image.open(os.path.join(AQUI, 'logo_full_q.png')).convert('RGB')
+    im = Image.open(os.path.join(AQUI, 'logo_mark_q.png')).convert('RGB')
     im.thumbnail((900, 900), Image.LANCZOS)
     buf = io.BytesIO()
     im.save(buf, 'JPEG', quality=90)
@@ -103,16 +103,8 @@ def pg(cls, inner, num=None):
     return f'<div class="pageframe"><div class="pagescale"><div class="page {cls}">{inner}{n}</div></div></div>'
 
 def rodape_secao(marcas, num):
-    """Rodapé com as marcas da seção: só logos, ou só texto — nunca misturado."""
-    com = [(x, logo_marca(x, 200)) for x in marcas]
-    tem_logo = [(x, u) for x, u in com if u]
-    if len(tem_logo) >= 3:
-        itens = ''.join(f'<img src="{u}" alt="{x}">' for x, u in tem_logo[:5])
-        cls = ' logos'
-    else:
-        itens = ''.join(f'<span>{x}</span>' for x in marcas[:6])
-        cls = ''
-    return (f'<div class="cat-foot"><div class="marcas{cls}">{itens}</div>'
+    """Rodapé da seção: só o número da página (marcas ficam na página 3)."""
+    return (f'<div class="cat-foot"><div class="marcas"></div>'
             f'<div class="pgchip">{num:02d}</div></div>')
 
 def header_secao(sec, slim=False):
@@ -171,9 +163,9 @@ def pagina_capa(num):
     <div class="capa-top"><div class="logopanel"><img src="{logo_uri()}" alt="Paratudo"></div></div>
     <div class="capa-title">
       <div class="kicker">Paratudo Parafusos e Ferramentas</div>
-      <h2>Catálogo<br>de Linhas <span>{ANO}</span></h2>
-      <p class="sub">Ferramentas, parafusos, EPIs e suprimentos — tudo o que a
-      sua obra, oficina ou indústria precisa, em um lugar só.</p>
+      <h2>Catálogo<br>de Produtos <span>{ANO}</span></h2>
+      <p class="sub">Ferramentas, parafusos, EPIs e suprimentos industriais
+      para obra, oficina e indústria.</p>
     </div>
     <div class="capa-mid">
       <div class="indice"><h3>O que você encontra</h3><ul>{idx}</ul></div>
@@ -187,24 +179,25 @@ def pagina_apresentacao(num):
     cards = f'''
     <div class="atend">
       <div class="acard">{icone('chave','aic')}<h4>Balcão</h4>
-        <p>Atendimento direto na loja, com quem entende do assunto.
-        Peça pelo nome, pela medida ou leve o exemplo — a gente acha.</p></div>
+        <p>Atendimento na loja, com quem entende do assunto. Peça pelo
+        nome, pela medida ou leve a peça de exemplo.</p></div>
       <div class="acard">{icone('raio','aic')}<h4>WhatsApp</h4>
-        <p>Orçamento rápido sem sair da obra:
-        <a href="{wpp}"><b>(35) 9.9758-0912</b></a>.
-        Manda a foto ou a lista, que a gente cota e separa.</p></div>
+        <p>Orçamento sem sair da obra pelo
+        <a href="{wpp}"><b>(35) 3427-2450</b></a>.
+        Mande a foto ou a lista que a gente cota e separa.</p></div>
       <div class="acard">{icone('caixa','aic')}<h4>Empresas</h4>
-        <p>Fornecimento pra indústrias, construtoras e oficinas da região,
-        com cotação por lista e entrega programada.</p></div>
+        <p>Fornecimento para indústrias, construtoras e oficinas da
+        região, com cotação por lista e entrega programada.</p></div>
     </div>'''
     return pg('apres', f'''
     <div class="ap-band"><div class="kicker">Quem somos</div>
       <h2>A loja que tem<br><span>para tudo</span></h2></div>
     <div class="ap-body">
-      <p class="lead">A <b>Paratudo Parafusos e Ferramentas</b> é a parceira de
-      quem constrói, conserta e produz em Pouso Alegre e região: ferramentas,
-      fixadores, EPIs e suprimentos industriais das marcas que o profissional
-      confia, com estoque de verdade e atendimento que resolve.</p>
+      <p class="lead">A <b>Paratudo Parafusos e Ferramentas</b> atende quem
+      constrói, conserta e produz em Pouso Alegre e região. Trabalhamos com
+      ferramentas, fixadores, EPIs e suprimentos industriais das principais
+      marcas do mercado, com estoque na loja e atendimento de quem conhece
+      o produto.</p>
       <h3 class="ap-sec">{HEXB}Como você prefere comprar</h3>
       {cards}
       <div class="entrega luz">{HEXB}<b>{CONTATO["entrega"]}</b><span>{CONTATO["entrega_obs"]}</span></div>
@@ -212,19 +205,16 @@ def pagina_apresentacao(num):
     <div class="capa-foot"><span class="fone">{CONTATO["fones"]}</span><span class="site">{CONTATO["cidade"]}</span></div>''', num)
 
 def pagina_marcas(num):
-    com, sem = [], []
+    com = []
     for m in MARCAS_PARCEIRAS:
         uri = logo_marca(m)
         if uri:
             com.append(f'<div class="mlogo"><img src="{uri}" alt="{m}"></div>')
-        else:
-            sem.append(f'<span class="mchip">{m}</span>')
     return pg('marcaspg', f'''
     <div class="ap-band"><div class="kicker">Marcas parceiras</div>
       <h2>As marcas que o<br><span>profissional confia</span></h2></div>
     <div class="mgrid">{''.join(com)}</div>
-    <div class="mchips">{''.join(sem)}</div>
-    <p class="mnota">Estas e muitas outras — o estoque completo você confere
+    <p class="mnota">Estas e muitas outras. O estoque completo você confere
     na loja ou no WhatsApp.</p>''', num)
 
 def pagina_destaques(num):
@@ -240,7 +230,7 @@ def pagina_destaques(num):
       <h2>{VONIXX['titulo']}</h2>
       <p class="sub">{VONIXX['texto']}</p></div>
     <div class="vx-band">{vx}<div class="vx-selo">Linha completa<br>na loja</div></div>
-    <div class="dk-sec"><h3>{HEXB}{ESCADAS['titulo']} — {ESCADAS['marca']}</h3>
+    <div class="dk-sec"><h3>{HEXB}{ESCADAS['titulo']} {ESCADAS['marca']}</h3>
       <p class="dk-nota">{ESCADAS['texto']}</p>
       <div class="dgrid4">{es}</div></div>
     <div class="dk-sec"><h3>{HEXB}{TINTAS['titulo']}</h3>
@@ -276,18 +266,25 @@ def pagina_contracapa(num):
     <div class="ct-info">
       <div><h5>Telefones</h5><p>{CONTATO['fones']}</p></div>
       <div><h5>Onde</h5><p>{CONTATO['cidade']}</p></div>
-      <div><h5>Catálogo completo</h5><p>{CONTATO['catalogo_online']}</p></div>
+      <div><h5>WhatsApp</h5><p>{CONTATO['fones']}</p></div>
     </div>
     <div class="entrega">{HEXB}<b>{CONTATO['entrega']}</b><span>{CONTATO['entrega_obs']}</span></div>
-    <div class="dk-foot"><span class="frase">Paratudo — a loja que tem para tudo.</span>
+    <div class="dk-foot"><span class="frase">Paratudo. A loja que tem para tudo.</span>
       <span class="fone">{ANO}</span></div>''')
 
 # ---------------------------------------------------------------- css
 CSS = '''
 :root{
-  --ink:#19191b; --canvas:#232026; --red:#c12025; --red-deep:#8f171b;
-  --paper:#ffffff; --steel:#6e696b; --line:#e7e3e2;
-  --dtext:#f5f3f2; --dmut:#b7b1b3;
+  /* tokens do padrao Paratudo (kit padrao-layout-paratudo) */
+  --ink:#19191b;            /* --topo-bg */
+  --canvas:#101012;         /* --fundo escuro, so a mesa de visualizacao */
+  --red:#c12025;            /* --marca / --marca-cheia */
+  --red-deep:#9c1a1e;       /* --marca-forte */
+  --paper:#ffffff;          /* --superficie */
+  --steel:#6b6b70;          /* --tinta-3 */
+  --line:#e4e4e8;           /* --borda */
+  --dtext:#f2f2f4;          /* --tinta no escuro */
+  --dmut:#b7b7b8;           /* --topo-tinta-2 resolvido */
 }
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--canvas);color:var(--dtext);
@@ -538,11 +535,11 @@ def main():
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Catálogo de Linhas {ANO} — Paratudo Parafusos e Ferramentas</title>
+<title>Catálogo de Produtos {ANO} · Paratudo Parafusos e Ferramentas</title>
 <style>{CSS}</style>
 </head>
 <body>
-<div class="toolbar"><span class="t">Catálogo de Linhas {ANO} — Paratudo</span>
+<div class="toolbar"><span class="t">Catálogo de Produtos {ANO} · Paratudo</span>
 <button onclick="window.print()">Imprimir / Salvar PDF</button></div>
 {''.join(paginas)}
 <script>{JS}</script>
